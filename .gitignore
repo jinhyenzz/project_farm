@@ -37,3 +37,7 @@ build/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Local working notes and backups
+/docs/CODEX_CHANGELOG.md
+/.codex-backups/
