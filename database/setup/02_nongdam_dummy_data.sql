@@ -2513,7 +2513,7 @@ SELECT seller_point_goals_seq.NEXTVAL,
 FROM dual
 CONNECT BY LEVEL <= 4;
 
-/* CODEX_REALISTIC_PRODUCT_DATA_START */
+/* PRODUCT_PRICE_ADJUSTMENT_START */
 /*
    공공 가격 API의 2026-07-27 조사값을 기준으로 상품 가격과 판매 단위를 현실화합니다.
    - 소매: API 소매 조사 가격을 기준으로 상품별 소폭 차등
@@ -3442,6 +3442,6 @@ SET package_weight_grams = CASE
 END
 WHERE package_weight_grams IS NULL;
 
-/* CODEX_REALISTIC_PRODUCT_DATA_END */
+/* PRODUCT_PRICE_ADJUSTMENT_END */
 
 COMMIT;
