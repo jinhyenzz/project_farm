@@ -6,10 +6,10 @@
 
 ## GitHub
 
-- 저장소: [https://github.com/shin-cj/project_farm.git](https://github.com/shin-cj/project_farm.git)
+- 저장소: [https://github.com/jinhyenzz/project_farm](https://github.com/jinhyenzz/project_farm)
 
 ```bash
-git clone https://github.com/shin-cj/project_farm.git
+git clone https://github.com/jinhyenzz/project_farm.git
 cd project_farm
 ```
 
@@ -129,30 +129,30 @@ project_farm/
 
 ## SQL 파일
 
-GitHub 프로젝트의 [`database/setup`](https://github.com/shin-cj/project_farm/tree/main/database/setup) 폴더에 최신 Oracle SQL 파일이 포함되어 있습니다.
+GitHub 프로젝트의 [`database/setup`](https://github.com/jinhyenzz/project_farm/tree/main/database/setup) 폴더에 최신 Oracle SQL 파일이 포함되어 있습니다.
 
 | 실행 순서 | 파일 | 역할 |
 |-------| --- | --- |
 | 1     | `01_nongdam_reset_schema.sql` | 기존 농담 테이블과 시퀀스를 제거하고 최신 구조 생성 |
 | 2     | `02_nongdam_dummy_data.sql` | 개발 및 화면 확인용 더미 데이터 등록 |
-| 3     | `04_nongdam_package_weight_backfill.sql` | 기존 상품의 포장 중량 데이터 보완 |
-| 4     | `05_nongdam_market_item_code_backfill.sql` | 기존 상품의 시세 품목 코드 데이터 보완 |
+| 3     | `03_nongdam_data_check.sql` | 테이블별 건수와 기본 데이터 확인(조회 전용) |
+| 4     | `04_nongdam_package_weight_backfill.sql` | 기존 상품의 포장 중량 데이터 보완 |
+| 5     | `05_nongdam_market_item_code_backfill.sql` | 기존 상품의 시세 품목 코드 데이터 보완 |
 
 > `01_nongdam_reset_schema.sql`은 현재 스키마의 관련 테이블과 데이터를 삭제한 뒤 다시 생성하는 파일입니다.
 
-새 개발 DB를 구성할 때 DBeaver 또는 Oracle SQL Developer에서 `01`부터 `04`까지 번호 순서대로 실행합니다.
+새 개발 DB를 구성할 때 DBeaver 또는 Oracle SQL Developer에서 `01 → 02 → 03 → 04 → 05` 순서로 실행합니다. `03`은 초기 데이터 확인용 SELECT 문이며 데이터를 변경하지 않습니다. 기존 데이터가 있는 DB에서는 초기화 파일 `01`을 실행하지 말고, 필요한 보완 SQL을 확인한 뒤 적용합니다.
 
 ## 실행 전 준비
 
 - Java 17
-- Node.js 20 이상 및 npm
+- Node.js 22.x(22.13.0 이상) 및 npm — 현재 잠금 파일의 Vite·ESLint 버전 기준
 - Oracle Database XE
 - DBeaver 또는 Oracle SQL Developer
 - 공공데이터포털 API 키
 - OpenAI API 키
 - Pexels API 키
 - 토스페이먼츠 테스트 키
-- 
 
 ## 백엔드 실행 방법
 
@@ -171,11 +171,12 @@ spring:
 
 ### 2. 환경변수 설정
 
-인텔리제이를 기준으로 백엔드 환경변수 편집에 해당 api를 추가.
+백엔드를 실행할 PowerShell 터미널에서 아래 세 환경변수를 설정합니다. IntelliJ로 실행한다면 Run/Debug Configuration의 환경변수에 같은 이름과 값을 각각 등록합니다.
 
-```
-API01_KEY="YOUR_PUBLIC_DATA_API_KEY"
-OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+```powershell
+$env:API01_KEY="YOUR_PUBLIC_DATA_API_KEY"
+$env:OPENAI_API_KEY="YOUR_OPENAI_API_KEY"
+$env:PEXELS_API_KEY="YOUR_PEXELS_API_KEY"
 ```
 
 토스페이먼츠 시크릿 키는 `application.yml`의 다음 항목에 테스트 키로 설정합니다.
@@ -211,7 +212,7 @@ npm run dev
 
 1. 저장소를 Clone
 2. Oracle 계정과 스키마 준비
-3. `database/setup`의 SQL을 `01`부터 `05`까지 실행
+3. 새 개발 DB에서 `database/setup`의 SQL을 `01 → 02 → 03 → 04 → 05` 순서로 실행
 4. `application.yml`의 DB 정보와 토스 테스트 키 설정
 5. 외부 API 환경변수 설정
 6. Spring Boot 백엔드 실행
